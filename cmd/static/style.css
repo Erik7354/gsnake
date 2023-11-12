@@ -1,0 +1,51 @@
+h1 {
+    text-align: center;
+}
+main {
+    width: 80%;
+    margin: 0 auto;
+}
+.box {
+    outline: thick double black;
+}
+/* Fields */
+.field-normal {
+    background-color: bisque;
+}
+.field-snake {
+    background-color: green;
+}
+.field-apple {
+    background-color: red;
+}
+/* Game Over */
+#game-over-banner {
+    height: 50px;
+    width: 80vw;
+    background-color: yellow;
+    /* text */
+    font-size: 25px;
+    font-weight: bold;
+    color: darkred;
+    line-height: 50px;
+    text-align: center;
+    vertical-align: middle;
+    /* position */
+    position: absolute;
+    margin: auto;
+    left: calc(50% - 40vw);
+    top: calc(50% - 25px);
+    z-index: 100;
+}
+/* Controls */
+#controls {
+    display: grid;
+    grid-template-columns: 50px 50px 50px;
+    grid-template-rows: 50px 50px;
+    grid-template-areas:
+        "  .   up    .  "
+        "left down right";
+    justify-content: center;
+    margin-top: 15px;
+    gap: 10px;
+}

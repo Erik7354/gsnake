@@ -1,0 +1,55 @@
+{{define "index"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>gsnake</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://unpkg.com/htmx.org@1.9.8"></script>
+</head>
+<body>
+    <main style="max-height: 100vh">
+        <div
+                hx-get="/game"
+                hx-swap="innerHTML"
+                hx-trigger="load, every {{.RR}}"
+        ></div>
+        <div id="controls">
+            <button
+                    class="box"
+                    style="grid-area: up"
+                    hx-get="/direction"
+                    hx-swap="none"
+                    hx-trigger="click, keyup[key=='ArrowUp'] from:body"
+                    hx-vals="js:{keyTrigger: 'ArrowUp'}"
+            >UP</button>
+            <button
+                    class="box"
+                    style="grid-area: left"
+                    hx-get="/direction"
+                    hx-swap="none"
+                    hx-trigger="click, keyup[key=='ArrowLeft'] from:body"
+                    hx-vals="js:{keyTrigger: 'ArrowLeft'}"
+            >LEFT</button>
+            <button
+                    class="box"
+                    style="grid-area: down"
+                    hx-get="/direction"
+                    hx-swap="none"
+                    hx-trigger="click, keyup[key=='ArrowDown'] from:body"
+                    hx-vals="js:{keyTrigger: 'ArrowDown'}"
+            >DOWN</button>
+            <button
+                    class="box"
+                    style="grid-area: right"
+                    hx-get="/direction"
+                    hx-swap="none"
+                    hx-trigger="click, keyup[key=='ArrowRight'] from:body"
+                    hx-vals="js:{keyTrigger: 'ArrowRight'}"
+            >RIGHT</button>
+        </div>
+    </main>
+</body>
+</html>
+{{end}}

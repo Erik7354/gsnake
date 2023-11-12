@@ -1,0 +1,20 @@
+{{define "game"}}
+<div>
+    <h1>Score: {{.Score}}</h1>
+    <div
+            class="box"
+            style="aspect-ratio: 1/1; display: grid; grid-template-columns: repeat({{.N}}, minmax(0,1fr)); min-height: 75vh; max-height: 75vh; margin: auto"
+    >
+        {{range .Fields}}
+        {{range .}}
+                <div class="field-{{.}}" style="border: 1px solid black; aspect-ratio: 1/1"></div>
+        {{end}}
+        {{end}}
+    </div>
+</div>
+{{if eq .GameOver true}}
+<div id="game-over-banner" class="box">
+    <div id="scroll-text">GAME OVER!</div>
+</div>
+{{end}}
+{{end}}
