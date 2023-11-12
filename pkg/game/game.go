@@ -68,7 +68,6 @@ func (g *Game) SetDirection(newDir direction) bool {
 	}
 	g.dir = newDir
 	return true
-	// TODO: fix bug, doenst set new dir but still renders
 }
 
 func (g *Game) updateFields() {
