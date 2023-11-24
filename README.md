@@ -20,13 +20,13 @@ make run
 
 Game settings are done by query parameters:
 
-- n: number of rows/columns; default: 5
+- n: number of rows/columns; default/min: 5
 - rr: refresh rate; default: 1000ms; [more formats](https://pkg.go.dev/time#ParseDuration)
 
 ## TODO
 
-- [ ] fix: apple respawns on start (Chrome)
-- [ ] highlight head of snake
+- [x] fix: apple respawns on start (Chrome)
+- [x] highlight head of snake
 - [ ] delete sessions
 - [ ] improve ui 
 - [ ] high scores
