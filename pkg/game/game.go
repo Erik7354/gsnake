@@ -36,6 +36,8 @@ type Game struct {
 	apple    *coordinate
 }
 
+// New creates a new Snake Game.
+// n should be >4
 func New(n int) *Game {
 	g := Game{
 		N:      n,
@@ -43,11 +45,17 @@ func New(n int) *Game {
 		Score:  0,
 		dir:    Right,
 		snake:  []coordinate{{0, 0}},
+		apple:  &coordinate{n - 2, 0},
 	}
 
 	for i := 0; i < len(g.Fields); i++ {
 		g.Fields[i] = make([]fieldType, g.N)
+		for j := range g.Fields[i] {
+			g.Fields[i][j] = normalField
+		}
 	}
+	g.Fields[0][0] = snakeField
+	g.Fields[0][n-2] = appleField
 
 	return &g
 }
@@ -112,11 +120,13 @@ func (g *Game) renderSnake() {
 
 func (g *Game) renderApple() {
 	if g.apple == nil {
+		// snake-fields
 		used := make(map[coordinate]struct{})
 		for _, c := range g.snake {
 			used[c] = struct{}{}
 		}
 
+		// generate random position for new apple
 		var rX, rY int
 		for {
 			rX, rY = rand.Intn(g.N), rand.Intn(g.N)

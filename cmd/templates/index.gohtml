@@ -13,8 +13,10 @@
         <div
                 hx-get="/game"
                 hx-swap="innerHTML"
-                hx-trigger="load, every {{.RR}}"
-        ></div>
+                hx-trigger="every {{.RR}}"
+        >
+            {{template "game" .Session}}
+        </div>
         <div id="controls">
             <button
                     class="box"

@@ -81,11 +81,13 @@ func (s server) index(w http.ResponseWriter, r *http.Request) {
 	})
 
 	_ = s.t.ExecuteTemplate(w, "index", struct {
-		N  int
-		RR string
+		N       int
+		RR      string
+		Session game.Game
 	}{
-		N:  n,
-		RR: rr,
+		N:       n,
+		RR:      rr,
+		Session: *s.games[gid],
 	})
 
 	s.log.Info(fmt.Sprintf("[%s] %s", r.Method, r.URL.Path))
