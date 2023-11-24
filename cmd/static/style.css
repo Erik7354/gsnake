@@ -12,8 +12,11 @@ main {
 .field-normal {
     background-color: bisque;
 }
-.field-snake {
+.field-head {
     background-color: green;
+}
+.field-tail {
+    background-color: greenyellow;
 }
 .field-apple {
     background-color: red;

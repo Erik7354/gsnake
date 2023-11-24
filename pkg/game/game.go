@@ -2,6 +2,7 @@ package game
 
 import (
 	"math/rand"
+	"reflect"
 	"slices"
 )
 
@@ -17,7 +18,8 @@ const (
 
 const (
 	normalField fieldType = "normal"
-	snakeField  fieldType = "snake"
+	headField   fieldType = "head"
+	tailField   fieldType = "tail"
 	appleField  fieldType = "apple"
 )
 
@@ -31,8 +33,9 @@ type Game struct {
 	Fields   [][]fieldType
 	Score    int
 	GameOver bool
-	dir      direction
-	snake    []coordinate
+	Dir      direction
+	head     coordinate
+	tail     []coordinate
 	apple    *coordinate
 }
 
@@ -43,8 +46,9 @@ func New(n int) *Game {
 		N:      n,
 		Fields: make([][]fieldType, n),
 		Score:  0,
-		dir:    Right,
-		snake:  []coordinate{{0, 0}},
+		Dir:    Right,
+		head:   coordinate{1, 0},
+		tail:   []coordinate{{0, 0}},
 		apple:  &coordinate{n - 2, 0},
 	}
 
@@ -54,7 +58,8 @@ func New(n int) *Game {
 			g.Fields[i][j] = normalField
 		}
 	}
-	g.Fields[0][0] = snakeField
+	g.Fields[0][1] = headField
+	g.Fields[0][0] = tailField
 	g.Fields[0][n-2] = appleField
 
 	return &g
@@ -71,18 +76,22 @@ func (g *Game) Render() {
 }
 
 func (g *Game) SetDirection(newDir direction) bool {
-	if (g.dir^newDir)%2 == 0 {
+	if (g.Dir^newDir)%2 == 0 {
 		return false
 	}
-	g.dir = newDir
+	g.Dir = newDir
 	return true
 }
 
 func (g *Game) updateFields() {
 	for y := 0; y < g.N; y++ {
 		for x := 0; x < g.N; x++ {
-			if slices.Contains(g.snake, coordinate{x, y}) {
-				g.Fields[y][x] = snakeField
+			if reflect.DeepEqual(g.head, coordinate{x, y}) {
+				g.Fields[y][x] = headField
+				continue
+			}
+			if slices.Contains(g.tail, coordinate{x, y}) {
+				g.Fields[y][x] = tailField
 				continue
 			}
 			if g.apple != nil && g.apple.x == x && g.apple.y == y {
@@ -96,33 +105,34 @@ func (g *Game) updateFields() {
 
 func (g *Game) renderSnake() {
 	// move body
-	tail := g.snake[0 : len(g.snake)-1]
-	for i := 0; i < len(tail); i++ {
-		g.snake[i] = g.snake[i+1]
+	for i := 0; i < len(g.tail)-1; i++ {
+		g.tail[i] = g.tail[i+1]
 	}
+	g.tail[len(g.tail)-1] = g.head
+
 	// move head
-	head := &g.snake[len(g.snake)-1]
-	switch g.dir {
+	switch g.Dir {
 	case Up:
-		head.y--
+		g.head.y--
 	case Left:
-		head.x--
+		g.head.x--
 	case Down:
-		head.y++
+		g.head.y++
 	case Right:
-		head.x++
+		g.head.x++
 	}
 
-	if head.x < 0 || head.x >= g.N || head.y < 0 || head.y >= g.N || slices.Contains(tail, coordinate{head.x, head.y}) {
+	if g.head.x < 0 || g.head.x >= g.N || g.head.y < 0 || g.head.y >= g.N || slices.Contains(g.tail, coordinate{g.head.x, g.head.y}) {
 		g.GameOver = true
 	}
 }
 
 func (g *Game) renderApple() {
 	if g.apple == nil {
-		// snake-fields
+		// fields used for head and tail
 		used := make(map[coordinate]struct{})
-		for _, c := range g.snake {
+		used[g.head] = struct{}{}
+		for _, c := range g.tail {
 			used[c] = struct{}{}
 		}
 
@@ -138,10 +148,9 @@ func (g *Game) renderApple() {
 		g.apple = &coordinate{rX, rY}
 	}
 
-	head := g.snake[len(g.snake)-1]
-	if g.apple.x == head.x && g.apple.y == head.y {
+	if g.apple.x == g.head.x && g.apple.y == g.head.y {
 		g.Score++
-		g.snake = append([]coordinate{g.snake[0]}, g.snake...)
+		g.tail = append([]coordinate{g.tail[0]}, g.tail...)
 		g.apple = nil
 	}
 }
