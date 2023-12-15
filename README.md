@@ -30,3 +30,4 @@ Game settings are done by query parameters:
 - [ ] delete sessions
 - [ ] improve ui 
 - [ ] high scores
+- [ ] use image.Point instead of coordinate

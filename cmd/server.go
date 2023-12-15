@@ -43,7 +43,6 @@ func (s server) session(r *http.Request) (*game.Game, error) {
 }
 
 func (s server) isGameOver(gameID string) bool {
-	fmt.Println("isGameOver exe")
 	return s.games[gameID].GameOver
 }
 
